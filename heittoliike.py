@@ -13,7 +13,10 @@ ay = -9.81 # m/s^2 (painovoiman kiihtyvyys)
 kax = 0
 kay = 0
 
+shapeList = [(-1,0),(1,0),(0,-1)]
 
+dy = 10 * (pi/180)
+y = 0
 
 dt = 0.01 # s (laskennan aikaväli)
 k = 0.0014 # kg/m (ilmanvastus)
@@ -35,6 +38,7 @@ while ylist[-1] > 0:
     ylist.append(ylist[-1] + vly*dt)
     vax = vlx # loppunopeus = seuraavan aikavälin lähtönopeus
     vay = vly
+    y += dy
     
     
 plt.plot(xlist,ylist,'o')
