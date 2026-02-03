@@ -31,10 +31,8 @@ while ylist[-1] > 0:
 
     vlx = vax + kax*dt# päivitetään nopeus
     vly = vay + kay*dt
-    vkx = (vax+vlx)/2 # määritetään keskinopeus
-    vky = (vay+vly)/2
-    xlist.append(xlist[-1] + vkx*dt) # päivitetään sijainti
-    ylist.append(ylist[-1] + vky*dt)
+    xlist.append(xlist[-1] + vlx*dt) # päivitetään sijainti
+    ylist.append(ylist[-1] + vly*dt)
     vax = vlx # loppunopeus = seuraavan aikavälin lähtönopeus
     vay = vly
     
