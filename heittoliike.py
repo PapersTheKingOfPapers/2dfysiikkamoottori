@@ -10,17 +10,18 @@ import math as mth
 
 ax = 0
 ay = -9.81 # m/s^2 (painovoiman kiihtyvyys)
-kax = 0
+kax = 0 #
 kay = 0
 
-shapeList = [(-1,0),(1,0),(0,-1)]
-
-dy = 10 * (pi/180)
-y = 0
-
-dt = 0.01 # s (laskennan aikaväli)
+dt = 0.05 # s (laskennan aikaväli)
 k = 0.0014 # kg/m (ilmanvastus)
 m = 0.16 # kg (partikkelin paino)
+
+shapeList = [(-1,0),(1,0),(0,-1)] # [(x,y)]
+
+w = 10 * (mth.pi/180) # rad/s (kulmanopeus)
+dphi = dt * w # rad (kulma-aseman muutos)
+phi = 0 # rad (kulma-asema)
 
 xlist = [0.0]
 ylist = [2.0] # m (partikkelin lähtösijainti)
@@ -29,6 +30,14 @@ vax = 10.0 # m/s (partikkelin lähtönopeus)
 vay = 7.0 # m/s
 
 while ylist[-1] > 0:
+    sx = []
+    sy = []
+    for i in shapeList:
+        sx.append(i[0])
+    for i in shapeList:
+        sy.append(i[1])
+
+
     kax = ax - (k/m) * (mth.sqrt(vax**2 + vay**2)) * vax
     kay = ay - (k/m) * (mth.sqrt(vax**2 + vay**2)) * vay
 
@@ -38,10 +47,10 @@ while ylist[-1] > 0:
     ylist.append(ylist[-1] + vly*dt)
     vax = vlx # loppunopeus = seuraavan aikavälin lähtönopeus
     vay = vly
-    y += dy
-    
-    
-plt.plot(xlist,ylist,'o')
+    phi += dphi
+
+plt.plot(sx, sy)  # monikulmio
+plt.plot(xlist,ylist,'o') # keskipiste
 plt.xlabel("x (m)")
 plt.ylabel("y (m)")
 plt.show()
