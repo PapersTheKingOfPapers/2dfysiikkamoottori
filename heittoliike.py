@@ -19,7 +19,7 @@ m = 0.16 # kg (partikkelin paino)
 
 shapeList = [(-2,-2),(-2,2),(3,0)] # [(x,y)]
 
-w = 90 * (mth.pi/180) # rad/s (kulmanopeus)
+w = 270 * (mth.pi/180) # rad/s (kulmanopeus)
 dphi = dt * w # rad (kulma-aseman muutos)
 phi = 0 # rad (kulma-asema)
 
@@ -28,15 +28,14 @@ ylist = [5.0] # m (partikkelin lähtösijainti)
 
 sx = []
 sy = []
-for i in shapeList:
-    R = (i[0] * mth.cos(phi)) - (i[1] * mth.sin(phi))
-    sx.append(R + xlist[0])
+for x, y in shapeList:
+    xR = (x * mth.cos(phi)) - (y * mth.sin(phi))
+    yR = (y * mth.sin(phi)) + (y * mth.cos(phi))
+    sx.append(xR + xlist[-1])
+    sy.append(yR + ylist[-1])
 sx.append(sx[0])
-for i in shapeList:
-    R = (i[0] * mth.sin(phi)) + (i[1] * mth.cos(phi))
-    sy.append(R + ylist[0])
 sy.append(sy[0])
-plt.plot(sx, sy)  # monikulmio
+plt.plot(sx, sy)  # monikulmio 1
 
 vax = 10.0 # m/s (partikkelin lähtönopeus)
 vay = 20.0 # m/s
@@ -47,7 +46,7 @@ while loop:
     if ylist[-1] < 0:
         loop = False
     phi += dphi
-    kax = ax - (k/m) * (mth.sqrt(vax**2 + vay**2)) * vax
+    kax = ax - (k/m) * (mth.sqrt(vax**2 + vay**2)) * vax # ilmanvastus
     kay = ay - (k/m) * (mth.sqrt(vax**2 + vay**2)) * vay
 
     vlx = vax + kax*dt# päivitetään nopeus
@@ -56,16 +55,17 @@ while loop:
     ylist.append(ylist[-1] + vly*dt)
     sx = []
     sy = []
-    for i in shapeList:
-        R = (i[0] * mth.cos(phi)) - (i[1] * mth.sin(phi))
-        sx.append(R + xlist[-1])
+    for x, y in shapeList:
+        xR = (x * mth.cos(phi)) - (y * mth.sin(phi))
+        yR = (x * mth.sin(phi)) + (y * mth.cos(phi))
+        sx.append(xR + xlist[-1])
+        sy.append(yR + ylist[-1])
     sx.append(sx[0])
-    for i in shapeList:
-        R = (i[0] * mth.sin(phi)) + (i[1] * mth.cos(phi))
-        sy.append(R + ylist[-1])
     sy.append(sy[0])
     for i in sy:
-        if i < 0 and vly < 0:
+        rp = (sx[-1] - xlist[-1], i - ylist[-1])
+        vp = ((-w * rp[1]) + vlx, w * rp[0] + vly) # Vcm + w x rp
+        if i < 0 and vp[1] < 0:
             plt.plot(sx, sy)  # monikulmio
             loop = False
 
