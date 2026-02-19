@@ -35,7 +35,7 @@ for x, y in shapeList:
     sy.append(yR + ylist[-1])
 sx.append(sx[0])
 sy.append(sy[0])
-plt.plot(sx, sy)  # monikulmio 1
+plt.plot(sx, sy, color='steelblue')  # monikulmio 1
 
 vax = 10.0 # m/s (partikkelin lähtönopeus)
 vay = 20.0 # m/s
@@ -63,20 +63,22 @@ while loop:
     sx.append(sx[0])
     sy.append(sy[0])
     for i in sy:
-        rp = (sx[-1] - xlist[-1], i - ylist[-1])
+        floor_y = sx[-1]*mth.tan(mth.radians(5)) 
+        # pisteen paikkavektori suhteessa monikulmion keskipisteeseen ->
+        rp = (sx[-1] - xlist[-1], i - ylist[-1]) 
         vp = ((-w * rp[1]) + vlx, w * rp[0] + vly) # Vcm + w x rp
-        if i < 0 and vp[1] < 0:
-            plt.plot(sx, sy)  # monikulmio
+        if i < floor_y and vp[1] < 0: # Törmäystarkistus
+            plt.plot(sx, sy, color='steelblue')  # monikulmio
             loop = False
 
     vax = vlx # loppunopeus = seuraavan aikavälin lähtönopeus
     vay = vly
-    plt.plot(sx, sy)  # monikulmio
+    plt.plot(sx, sy, color='steelblue')  # monikulmio
 
-plt.plot(xlist,ylist,'o') # keskipiste
+plt.plot(xlist,ylist,'o', color='royalblue') # keskipiste
 plt.xlabel("x (m)")
 plt.ylabel("y (m)")
 axe = plt.gca()
 axe.set_aspect('equal', adjustable='box')
-plt.axhline(y=0, color='r', linestyle='-')
+plt.axline((0, 0), slope=mth.tan(mth.radians(5)), color='red', label='axline')
 plt.show()
